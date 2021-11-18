@@ -12,6 +12,18 @@ int main() {
     RenderWindow window(VideoMode(FIELD_SIZE_X * TILE_SIZE, FIELD_SIZE_Y * TILE_SIZE), "TETRIS");
     // CircleShape shape(100.f);
     // shape.setFillColor(Color::Green);
+    Texture t;
+    t.loadFromFile("images/tiles.png");
+
+    Font font;
+    // font.loadFromFile("arial.ttf");
+    Text text;
+    text.setFont(font);
+    text.setString("hello");
+    text.setCharacterSize(24);
+    text.setFillColor(Color::Red);
+
+    window.draw(text);
 
     while (window.isOpen())
     {
@@ -22,8 +34,7 @@ int main() {
                 window.close();
         }
 
-        window.clear();
-        // window.draw(shape);
+        window.clear(Color::White);
         window.display();
     }
 
