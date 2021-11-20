@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <time.h>
+#include <vector>
 
 using namespace sf;
 using namespace std;
@@ -81,7 +82,17 @@ public:
 };
 
 
-int main() {
+
+
+
+
+
+
+
+
+
+int main()
+{
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "TETRIS");
     // // text
     // Font font;
@@ -93,6 +104,8 @@ int main() {
     // text.setFillColor(Color::Red);
     // text.setPosition(100, 100);
 
+    vector<TetrisBlock> blocks;
+
     TetrisBlock block;
     block.init();
     block.color = GREEN_BLOCK;
@@ -100,6 +113,8 @@ int main() {
     s.setTextureRect(block.color);
     s.setPosition(block.position[0], block.position[1]);
     block.block = s;
+
+    blocks.push_back(block);
 
     // tiem.
     Clock clock;
@@ -110,11 +125,13 @@ int main() {
         float time = clock.getElapsedTime().asSeconds();
         clock.restart();
         tm += time;
-        // std::cout << tm << std::endl;
 
         Event event;
         // bg-color.
         window.clear(Color::White);
+
+        TetrisBlock active = blocks[blocks.size()-1];
+        blocks.pop_back();
 
         // close.
         while (window.pollEvent(event))
@@ -125,31 +142,37 @@ int main() {
             }
             if (event.type == Event::KeyPressed)
             {
-                if (event.key.code == Keyboard::Left) block.move_left_block();
-                if (event.key.code == Keyboard::Right) block.move_right_block();
-                if (event.key.code == Keyboard::Up) block.move_up_block();
-                if (event.key.code == Keyboard::Down) block.move_down_block();
+                if (event.key.code == Keyboard::Left) active.move_left_block();
+                if (event.key.code == Keyboard::Right) active.move_right_block();
+                if (event.key.code == Keyboard::Up) active.move_up_block();
+                if (event.key.code == Keyboard::Down) active.move_down_block();
             }
         }
 
         if (tm > DOWN_CYCLE) {
-            block.move_down_block();
+            active.move_down_block();
             tm = 0;
         }
 
-        if (block.position[1] >= BUTTOM) {
-            TetrisBlock b;
-            b.init();
-            b.color = RED_BLOCK;
-            Sprite s(b.tiles);
-            s.setTextureRect(b.color);
-            s.setPosition(b.position[0], b.position[1]);
-            b.block = s;
-            window.draw(b.block);
+        blocks.push_back(active);
+
+        if (active.position[1] >= BUTTOM) {
+            TetrisBlock new_block;
+            new_block.init();
+            new_block.color = YELLOW_BLOCK;
+            Sprite new_s(new_block.tiles);
+            new_s.setTextureRect(new_block.color);
+            new_s.setPosition(new_block.position[0], new_block.position[1]);
+            new_block.block = new_s;
+
+            blocks.push_back(new_block);
+            // window.draw(new_s);
         }
 
         // draw.
-        window.draw(block.block);
+        for (int i = 0; i < blocks.size(); i++) {
+            window.draw(blocks[i].block);
+        }
         window.display();
     }
 
