@@ -10,31 +10,44 @@ const int TILE_SIZE = 30;
 
 int main() {
     RenderWindow window(VideoMode(FIELD_SIZE_X * TILE_SIZE, FIELD_SIZE_Y * TILE_SIZE), "TETRIS");
-    // CircleShape shape(100.f);
-    // shape.setFillColor(Color::Green);
-    Texture t;
-    t.loadFromFile("images/tiles.png");
 
+    // text
     Font font;
-    // font.loadFromFile("arial.ttf");
+    font.loadFromFile("fonts/arial.ttf");
     Text text;
     text.setFont(font);
     text.setString("hello");
     text.setCharacterSize(24);
     text.setFillColor(Color::Red);
+    text.setPosition(100, 100);
 
-    window.draw(text);
+    // image.
+    Texture t;
+    t.loadFromFile("images/tiles.png");
+    Sprite s(t);
+    s.setTextureRect(IntRect(0,0 , TILE_SIZE, TILE_SIZE));
+	s.setPosition(200, 100);
 
+    // window.
     while (window.isOpen())
     {
         Event event;
+        // bg-color.
+        window.clear(Color::White);
+
+        // close.
         while (window.pollEvent(event))
         {
             if (event.type == Event::Closed)
+            {
                 window.close();
+            }
         }
 
-        window.clear(Color::White);
+        // draw.
+        window.draw(s);
+        window.draw(text);
+
         window.display();
     }
 
