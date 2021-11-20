@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <time.h>
 
 using namespace sf;
 
@@ -9,6 +10,8 @@ const int TILE_SIZE = 30;
 const int WIDTH = FIELD_SIZE_X * TILE_SIZE;
 const int HEIGHT = FIELD_SIZE_Y * TILE_SIZE;
 const int CENTER_WIDTH = WIDTH / 2 - TILE_SIZE;
+
+const int DOWN_CYCLE = 1;
 
 const IntRect GREEN_BLOCK = IntRect(0, 0, TILE_SIZE, TILE_SIZE);
 const IntRect YELLOW_BLOCK = IntRect(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
@@ -50,8 +53,8 @@ int main() {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "TETRIS");
 
     // image.
-    Texture t;
-    t.loadFromFile("images/tiles.png");
+    Texture tiles;
+    tiles.loadFromFile("images/tiles.png");
 
     // // text
     // Font font;
@@ -66,13 +69,22 @@ int main() {
     // tmp position.
     int position[2] = {CENTER_WIDTH, 0};
     // block
-    Sprite s(t);
+    Sprite s(tiles);
     s.setTextureRect(GREEN_BLOCK);
     s.setPosition(position[0], position[1]);
+
+    // tiem.
+    Clock clock;
+    float tm;
 
     // window.
     while (window.isOpen())
     {
+        float time = clock.getElapsedTime().asSeconds();
+        clock.restart();
+        tm += time;
+        // std::cout << tm << std::endl;
+
         Event event;
         // bg-color.
         window.clear(Color::White);
@@ -91,6 +103,11 @@ int main() {
                 if (event.key.code == Keyboard::Up) s = move_up_block(s, position);
                 if (event.key.code == Keyboard::Down) s = move_down_block(s, position);
             }
+        }
+
+        if (tm > DOWN_CYCLE) {
+            s = move_down_block(s, position);
+            tm = 0;
         }
 
         // draw.
