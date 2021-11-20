@@ -10,3 +10,6 @@ docker exec -it tetris bash
 
 ### libs
 * https://github.com/SFML/SFML/releases
+
+## fonts
+* https://www.freefontspro.com/14454/arial.ttf
