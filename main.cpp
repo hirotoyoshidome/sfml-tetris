@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include <vector>
+#include <random>
 
 using namespace sf;
 using namespace std;
@@ -79,7 +80,14 @@ public:
 };
 
 
-
+IntRect getColor()
+{
+    std::random_device rd;
+    int t = rd() % 3;
+    if (t == 0) return GREEN_BLOCK;
+    if (t == 1) return YELLOW_BLOCK;
+    if (t == 2) return RED_BLOCK;
+}
 
 
 
@@ -110,7 +118,7 @@ int main()
     TetrisBlock block;
     block.init();
     Sprite s(tiles);
-    s.setTextureRect(GREEN_BLOCK);
+    s.setTextureRect(getColor());
     s.setPosition(block.position[0], block.position[1]);
     block.block = s;
 
@@ -156,7 +164,7 @@ int main()
             TetrisBlock new_block;
             new_block.init();
             Sprite new_s(tiles);
-            new_s.setTextureRect(YELLOW_BLOCK);
+            new_s.setTextureRect(getColor());
             new_s.setPosition(new_block.position[0], new_block.position[1]);
             new_block.block = new_s;
             blocks.push_back(new_block);
