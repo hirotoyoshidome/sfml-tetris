@@ -23,6 +23,9 @@ const IntRect YELLOW_BLOCK = IntRect(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
 const IntRect RED_BLOCK = IntRect(TILE_SIZE*2, 0, TILE_SIZE, TILE_SIZE);
 
 
+#define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
+
+
 class BaseBlock
 {
 public:
@@ -129,6 +132,30 @@ int main()
 
     blocks.push_back(block);
 
+    // address.
+    int address[FIELD_SIZE_Y][FIELD_SIZE_X] = {
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0}
+    };
+
     // tiem.
     Clock clock;
     float tm;
@@ -166,6 +193,10 @@ int main()
         blocks.push_back(active);
 
         if (active.position[1] >= BUTTOM) {
+            // set address.
+            address[active.position[1] / TILE_SIZE][active.position[0] / TILE_SIZE] = 1;
+
+            // create new block.
             TetrisBlock new_block;
             new_block.init();
             Sprite new_s(tiles);
@@ -173,6 +204,14 @@ int main()
             new_s.setPosition(new_block.position[0], new_block.position[1]);
             new_block.block = new_s;
             blocks.push_back(new_block);
+
+            for (int i = 0; i < ARRAY_LENGTH(address); i++) {
+                for (int j = 0; j < ARRAY_LENGTH(address[i]); j++) {
+                    cout << address[i][j] << ", ";
+                }
+                cout << " " << endl;
+            }
+
         }
 
         window.clear(Color::White);
