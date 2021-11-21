@@ -25,9 +25,7 @@ class BaseBlock
 {
 public:
 
-    Texture tiles;
     Sprite block;
-    IntRect color;
     int position[2];
 
 public:
@@ -39,7 +37,6 @@ public:
 
     void init()
     {
-        tiles.loadFromFile("images/tiles.png");
         position[0] = CENTER_WIDTH;
         position[1] = 0;
     }
@@ -94,12 +91,16 @@ public:
 int main()
 {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "TETRIS");
+
+    Texture tiles;
+    tiles.loadFromFile("images/tiles.png");
+
     // // text
     // Font font;
     // font.loadFromFile("fonts/arial.ttf");
     // Text text;
     // text.setFont(font);
-    // text.setString("hello");
+    // text.setString("tetris");
     // text.setCharacterSize(24);
     // text.setFillColor(Color::Red);
     // text.setPosition(100, 100);
@@ -108,9 +109,8 @@ int main()
 
     TetrisBlock block;
     block.init();
-    block.color = GREEN_BLOCK;
-    Sprite s(block.tiles);
-    s.setTextureRect(block.color);
+    Sprite s(tiles);
+    s.setTextureRect(GREEN_BLOCK);
     s.setPosition(block.position[0], block.position[1]);
     block.block = s;
 
@@ -126,14 +126,10 @@ int main()
         clock.restart();
         tm += time;
 
-        Event event;
-        // bg-color.
-        window.clear(Color::White);
-
         TetrisBlock active = blocks[blocks.size()-1];
         blocks.pop_back();
 
-        // close.
+        Event event;
         while (window.pollEvent(event))
         {
             if (event.type == Event::Closed)
@@ -159,15 +155,14 @@ int main()
         if (active.position[1] >= BUTTOM) {
             TetrisBlock new_block;
             new_block.init();
-            new_block.color = YELLOW_BLOCK;
-            Sprite new_s(new_block.tiles);
-            new_s.setTextureRect(new_block.color);
+            Sprite new_s(tiles);
+            new_s.setTextureRect(YELLOW_BLOCK);
             new_s.setPosition(new_block.position[0], new_block.position[1]);
             new_block.block = new_s;
-
             blocks.push_back(new_block);
-            // window.draw(new_s);
         }
+
+        window.clear(Color::White);
 
         // draw.
         for (int i = 0; i < blocks.size(); i++) {
