@@ -3,6 +3,7 @@
 #include <time.h>
 #include <vector>
 #include <random>
+#include <string>
 
 using namespace sf;
 using namespace std;
@@ -100,19 +101,23 @@ int main()
 {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "TETRIS");
 
+    // tiles.
     Texture tiles;
     tiles.loadFromFile("images/tiles.png");
 
-    // // text
-    // Font font;
-    // font.loadFromFile("fonts/arial.ttf");
-    // Text text;
-    // text.setFont(font);
-    // text.setString("tetris");
-    // text.setCharacterSize(24);
-    // text.setFillColor(Color::Red);
-    // text.setPosition(100, 100);
+    // bg-text.
+    Font font;
+    font.loadFromFile("fonts/arial.ttf");
+    Text text;
+    text.setFont(font);
+    std::string bgtext = "tetris";
+    text.setString(bgtext);
+    int fontsize = 16;
+    text.setCharacterSize(fontsize);
+    text.setFillColor(Color::Red);
+    text.setPosition(WIDTH-fontsize * bgtext.length()/2, 0);
 
+    // blocks.
     vector<TetrisBlock> blocks;
 
     TetrisBlock block;
@@ -173,6 +178,7 @@ int main()
         window.clear(Color::White);
 
         // draw.
+        window.draw(text);
         for (int i = 0; i < blocks.size(); i++) {
             window.draw(blocks[i].block);
         }
